@@ -1,0 +1,25 @@
+{
+  "name": "compropago/views-sdk",
+  "type": "library",
+  "descripction": "Libreria que permite utilizar las platillas predefiniadas por ComproPago como son recivo de compra, Listado de proveedores y boton dinamico de pago",
+  "keywords": ["views","php","smarty","compropago"],
+  "homepage": "https://github.com/danteay/compropago-views-sdk",
+  "license": "Apahce-2.0",
+  "authors": [
+    {
+      "name": "Arthur",
+      "email": "dante.aguilar41@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5"
+  },
+  "suggest":{
+    "compropago/php-sdk": ">=1.1"
+  },
+  "autoload":{
+    "psr-4":{
+      "CompropagoViews\\": "Views"
+    }
+  }
+}
