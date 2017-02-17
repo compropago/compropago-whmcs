@@ -17,61 +17,117 @@
  * @license http://www.whmcs.com/license/ WHMCS Eula
  */
 // Require libraries needed for gateway module functions.
+
 require_once __DIR__ . '/../../../init.php';
 require_once __DIR__ . '/../../../includes/gatewayfunctions.php';
 require_once __DIR__ . '/../../../includes/invoicefunctions.php';
 
+function init_webhook() {
+    /**
+     * Validacion del modulo
+     */
+    $gatewayModuleName = basename(__FILE__, '.php');
+    $gatewayParams = getGatewayVariables($gatewayModuleName);
 
-$gatewayModuleName = basename(__FILE__, '.php');
-$gatewayParams = getGatewayVariables($gatewayModuleName);
-if (!$gatewayParams['type']) {
-    die("Module Not Activated");
-}
+    $systemUrl = $gatewayParams['systemurl'];
+    $admin     = $gatewayParams['admin_user'];
 
+    $publickey = ($gatewayParams['mode'] == "Live") ? $gatewayParams['publickey_live'] : $gatewayParams['publickey_test'];
+    $privatekey= ($gatewayParams['mode'] == "Live") ? $gatewayParams['privatekey_live'] : $gatewayParams['privatekey_test'];
 
-$request = @file_get_contents('php://input');
-$jsonObj = json_decode($request);
-if(!$jsonObj = json_decode($request)){
-    die('Tipo de Request no Valido');
-}
-
-
-if($jsonObj->id=="ch_00000-000-0000-000000" || $jsonObj->short_id =="000000"){
-    die("Probando el WebHook?, <b>Ruta correcta.</b>");
-}
-
-$invoiceId = $jsonObj->order_info->order_id;
-$systemUrl = $gatewayParams['systemurl'];
-$amount    = $jsonObj->order_info->order_price;
-$orderFee  = $jsonObj->fee;
-
-$admin     = $gatewayParams['admin_user'];
-
-$publickey = ($gatewayParams['mode'] == "Live") ? $gatewayParams['publickey_live'] : $gatewayParams['publickey_test'];
-$privatekey= ($gatewayParams['mode'] == "Live") ? $gatewayParams['privatekey_live'] : $gatewayParams['privatekey_test'];
-
-$hash = md5($invoiceId . $systemUrl . $publickey);
-
-if($hash != $jsonObj->order_info->order_name){
-    die('Hash Verification Failure');
-}
-
-
-$invoiceId = checkCbInvoiceID($invoiceId,$gatewayModuleName);
-checkCbTransID($jsonObj->id);
-
-
-if($jsonObj->type == 'charge.success'){
-    $action              = 'acceptorder';
-    $values['orderid']   = $invoiceId;
-    $values['sendemail'] = false;
-    $values["autosetup"] = true;
-
-    $response = localAPI($action, $values, $admin);
-
-    if($response['result'] == 'error'){
-        die($response['message']);
+    if (!$gatewayParams['type']) {
+        die("Module Not Activated");
     }
 
-    addInvoicePayment($invoiceId,$jsonObj->id,$amount,$orderFee,$gatewayModuleName);
+    /**
+     * Obtencion de la peticion
+     */
+    $request = @file_get_contents('php://input');
+    if (!$jsonObj = json_decode($request)) {
+        die('Tipo de Request no Valido');
+    }
+
+    /**
+     * Validacion de peticiones de prueba
+     */
+    if ($jsonObj->id=="ch_00000-000-0000-000000") {
+        die("Probando el WebHook?, Ruta correcta.");
+    }
+
+    /**
+     * Verificando orden en el servidor
+     */
+    $response = verify_order($jsonObj->id, $publickey, $privatekey);
+
+    /**
+     * Get data
+     */
+    $token = $jsonObj->order_info->order_id;
+    $token = explode('-', $token);
+
+    $invoiceId = $token[0];
+    $token = $token[1];
+
+    $amount    = $response->order_info->order_price;
+    $orderFee  = $response->fee;
+
+    $hash = md5($invoiceId . $systemUrl . $publickey);
+
+    /**
+     * Validar si el pago corresponde a la tienda
+     */
+    if ($hash != $token) {
+        die('Hash Verification Failure');
+    }
+
+    $invoiceId = checkCbInvoiceID($invoiceId, $gatewayModuleName);
+    checkCbTransID($response->id);
+
+    if ($response->type == 'charge.success') {
+        $action              = 'acceptorder';
+        $values['orderid']   = $invoiceId;
+        $values['sendemail'] = false;
+        $values["autosetup"] = true;
+
+        $response = localAPI($action, $values, $admin);
+
+        if ($response['result'] == 'error') {
+            die($response['message']);
+        }
+
+        addInvoicePayment($invoiceId,$jsonObj->id,$amount,$orderFee,$gatewayModuleName);
+    }
+
+    die('Proceso terminado');
 }
+
+function verify_order ($order_id, $publickkey, $privatekey) {
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.compropago.com/v1/charges/$order_id/",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_POSTFIELDS => "",
+        CURLOPT_HTTPHEADER => array(
+            "authorization: Basic ".base64_encode($privatekey.':'.$publickkey),
+            "cache-control: no-cache",
+            "content-type: application/json",
+        ),
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+
+    return json_decode($response);
+}
+
+/**
+ * Inicializa el proceso
+ */
+init_webhook();

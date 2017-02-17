@@ -20,13 +20,10 @@
  */
 
 require_once __DIR__ ."/../../includes/functions.php";
-require_once __DIR__ ."/../vendor/autoload.php";
 
 if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
 }
-
-use CompropagoViews\ChargeView;
 
 /**
  * Funcion que despluega los campos de configuracion para el modulo de ComproPago
@@ -108,8 +105,25 @@ function compropago_config()
  * @param $params
  * @return null
  */
-function compropago_link($params)
-{
+function compropago_link($params) {
+    global $CONFIG;
+
+    /**
+     * Recuperación del template del formulario
+     *
+     * @param $data
+     * @return mixed|string
+     */
+    function render_button($data) {
+        $button = file_get_contents(__DIR__ . '/../cpvendor/button.html');
+
+        foreach ($data as $key => $value) {
+            $button = str_replace($key, $value, $button);
+        }
+
+        return $button;
+    }
+
     $aux = null;
 
     $file = explode("/",$_SERVER["REQUEST_URI"]);
@@ -123,19 +137,19 @@ function compropago_link($params)
     if(preg_match('/viewinvoice.php/',$file)){
         $data = array(
             "{{publickey}}"       => $publickey,
-            "{{client_name}}"     => "WHMCS",
-            "{{version}}"         => "1.1",
+            "{{order_id}}"        => $params['invoiceid'].'-'.$hash,
+            "{{order_name}}"      => $params['description'],
+            "{{order_price}}"     => $params['amount'],
             "{{customer_name}}"   => $params['clientdetails']['firstname']." ".$params['clientdetails']['lastname'],
             "{{customer_email}}"  => $params['clientdetails']['email'],
-            "{{order_price}}"     => $params['amount'],
-            "{{order_id}}"        => $params['invoiceid'],
-            "{{order_name}}"      => $hash,
+            "{{currency}}"        => $params['currency'],
             "{{success_url}}"     => $params['returnurl'],
             "{{failure_url}}"     => $params['returnurl'],
+            "{{client_name}}"     => "WHMCS",
+            "{{version}}"         => $CONFIG['Version']
         );
 
-        $aux = "<style>".ChargeView::getSourceStyle()."</style>";
-        $aux .= ChargeView::getView('button', $data, 'source', 'html');
+        $aux = render_button($data);
     }else{
         $aux = '<img src="https://media.licdn.com/media/p/5/005/02d/277/3e9dd1a.png"><br>';
     }
