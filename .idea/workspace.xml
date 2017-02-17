@@ -2,32 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1b143e78-8f59-4bb5-bd08-bdd54052f691" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/autoload.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/composer/ClassLoader.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/composer/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/composer/autoload_classmap.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/composer/autoload_namespaces.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/composer/autoload_psr4.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/composer/autoload_real.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/composer/autoload_static.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/composer/installed.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/Views/Assests/css/cpstyle.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/Views/ChargeViews.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/Views/Files/php/button.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/Views/Files/php/providers.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/Views/Files/php/raw.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/Views/Files/php/receipt.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/Views/Files/tpl/button.tpl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/Views/Files/tpl/providers.tpl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/Views/Files/tpl/raw.tpl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/Views/Files/tpl/receipt.tpl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/composer.json" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/modules/vendor/compropago/views-sdk/Views/Files/html/button.html" afterPath="$PROJECT_DIR$/modules/cpvendor/button.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/modules/gateways/callback/compropago.php" afterPath="$PROJECT_DIR$/modules/gateways/callback/compropago.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/modules/gateways/compropago.php" afterPath="$PROJECT_DIR$/modules/gateways/compropago.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/modules/cpvendor/button.html" afterPath="$PROJECT_DIR$/modules/cpvendor/button.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -42,11 +18,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="compropago.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="compropago.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/gateways/compropago.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="99" column="0" lean-forward="true" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+            <state relative-caret-position="435">
+              <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
               <folding>
                 <element signature="e#1191#3825#0#PHP" expanded="false" />
                 <marker date="1487287241000" expanded="true" signature="1631:1713" ph="..." />
@@ -68,11 +44,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="button.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="button.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/cpvendor/button.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="317" column="55" lean-forward="false" selection-start-line="317" selection-start-column="55" selection-end-line="317" selection-end-column="55" />
+            <state relative-caret-position="285">
+              <caret line="19" column="3" lean-forward="true" selection-start-line="19" selection-start-column="3" selection-end-line="19" selection-end-column="3" />
               <folding>
                 <element signature="n#style#0;n#!!top" expanded="false" />
               </folding>
@@ -298,12 +274,12 @@
       <workItem from="1487188212842" duration="4426000" />
       <workItem from="1487276549255" duration="276000" />
       <workItem from="1487284904067" duration="2378000" />
-      <workItem from="1487349443704" duration="299000" />
+      <workItem from="1487349443704" duration="647000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7379000" />
+    <option name="totallyTimeSpent" value="7727000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1010" extended-state="6" />
@@ -316,7 +292,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32897604" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -472,16 +448,6 @@
     <entry file="file://$PROJECT_DIR$/modules/vendor/compropago/views-sdk/Views/Files/php/button.php" />
     <entry file="file://$PROJECT_DIR$/modules/cpvendor/button.php" />
     <entry file="file://$PROJECT_DIR$/modules/vendor/compropago/views-sdk/Views/Assests/css/cpstyle.css" />
-    <entry file="file://$PROJECT_DIR$/modules/cpvendor/button.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="317" column="55" lean-forward="false" selection-start-line="317" selection-start-column="55" selection-end-line="317" selection-end-column="55" />
-          <folding>
-            <element signature="n#style#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/gateways/callback/compropago.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="645">
@@ -492,14 +458,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/gateways/compropago.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="99" column="0" lean-forward="true" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+        <state relative-caret-position="435">
+          <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
           <folding>
             <element signature="e#1191#3825#0#PHP" expanded="false" />
             <marker date="1487287241000" expanded="true" signature="1631:1713" ph="..." />
             <marker date="1487287241000" expanded="true" signature="2008:2090" ph="..." />
             <marker date="1487287241000" expanded="true" signature="2383:2465" ph="..." />
             <marker date="1487287241000" expanded="true" signature="2760:2842" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/cpvendor/button.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="3" lean-forward="true" selection-start-line="19" selection-start-column="3" selection-end-line="19" selection-end-column="3" />
+          <folding>
+            <element signature="n#style#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
