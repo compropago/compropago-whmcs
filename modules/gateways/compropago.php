@@ -93,7 +93,7 @@ function compropago_config()
             "Type"         => "textarea",
             "Descripcion"  => "Copie esta direccion y agreguela en el panel de compropago en la seccion
                                <a href='https://www.compropago.com/panel/webhooks'>Webhooks</a>",
-            "Default"      => $_SERVER['SERVER_NAME'].$aux."modules/gateways/callback/compropago.php"
+            "Default"      => $_SERVER['REQUEST_SCHEME'].$_SERVER['SERVER_NAME'].$aux."modules/gateways/callback/compropago.php"
         ),
     );
 }
