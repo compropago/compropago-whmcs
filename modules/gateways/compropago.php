@@ -98,6 +98,15 @@ function compropago_config()
     );
 }
 
+  function render_button($data) {
+    $button = file_get_contents(__DIR__ . '/../cpvendor/button.html');
+
+    foreach ($data as $key => $value) {
+        $button = str_replace($key, $value, $button);
+    }
+
+    return $button;
+  }
 
 /**
  * Ejecucion del proceso de pago
@@ -114,16 +123,6 @@ function compropago_link($params) {
      * @param $data
      * @return mixed|string
      */
-    function render_button($data) {
-        $button = file_get_contents(__DIR__ . '/../cpvendor/button.html');
-
-        foreach ($data as $key => $value) {
-            $button = str_replace($key, $value, $button);
-        }
-
-        return $button;
-    }
-
     $aux = null;
 
     $file = explode("/",$_SERVER["REQUEST_URI"]);
@@ -156,4 +155,3 @@ function compropago_link($params) {
 
     return $aux;
 }
-
