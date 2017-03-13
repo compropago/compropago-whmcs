@@ -17,8 +17,6 @@
  * @license http://www.whmcs.com/license/ WHMCS Eula
  */
 // Require libraries needed for gateway module functions.
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/../../../init.php';
 require_once __DIR__ . '/../../../includes/gatewayfunctions.php';
