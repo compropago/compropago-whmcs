@@ -17,28 +17,29 @@
  * @license http://www.whmcs.com/license/ WHMCS Eula
  */
 // Require libraries needed for gateway module functions.
-
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/../../../init.php';
 require_once __DIR__ . '/../../../includes/gatewayfunctions.php';
 require_once __DIR__ . '/../../../includes/invoicefunctions.php';
 
+use WHMCS\Database\Capsule;
+
 function init_webhook() {
+
     /**
      * Validacion del modulo
      */
     $gatewayModuleName = basename(__FILE__, '.php');
     $gatewayParams = getGatewayVariables($gatewayModuleName);
-
     $systemUrl = $gatewayParams['systemurl'];
     $admin     = $gatewayParams['admin_user'];
-
     $publickey = ($gatewayParams['mode'] == "Live") ? $gatewayParams['publickey_live'] : $gatewayParams['publickey_test'];
     $privatekey= ($gatewayParams['mode'] == "Live") ? $gatewayParams['privatekey_live'] : $gatewayParams['privatekey_test'];
-
     if (!$gatewayParams['type']) {
         die("Module Not Activated");
     }
-
     /**
      * Obtencion de la peticion
      */
@@ -46,14 +47,12 @@ function init_webhook() {
     if (!$jsonObj = json_decode($request)) {
         die('Tipo de Request no Valido');
     }
-
     /**
      * Validacion de peticiones de prueba
      */
     if ($jsonObj->id=="ch_00000-000-0000-000000") {
         die("Probando el WebHook?, Ruta correcta.");
     }
-
     /**
      * Verificando orden en el servidor
      */
@@ -64,46 +63,51 @@ function init_webhook() {
      */
     $token = $jsonObj->order_info->order_id;
     $token = explode('-', $token);
-
     $invoiceId = $token[0];
     $token = $token[1];
-
     $amount    = $response->order_info->order_price;
     $orderFee  = $response->fee;
-
     $hash = md5($invoiceId . $systemUrl . $publickey);
-
     /**
      * Validar si el pago corresponde a la tienda
      */
     if ($hash != $token) {
         die('Hash Verification Failure');
     }
+    $tblordersID = Capsule::table('tblorders')->where('invoiceid', $invoiceId)->get();
+    $generalID = json_decode(json_encode($tblordersID), true);
+    $justID = $generalID[0];
+    $otherID = $justID["id"];
 
     $invoiceId = checkCbInvoiceID($invoiceId, $gatewayModuleName);
     checkCbTransID($response->id);
 
-    if ($response->type == 'charge.success') {
-        $action              = 'acceptorder';
-        $values['orderid']   = $invoiceId;
-        $values['sendemail'] = false;
-        $values["autosetup"] = true;
-
-        $response = localAPI($action, $values, $admin);
-
-        if ($response['result'] == 'error') {
-            die($response['message']);
+    switch ($response->type) {
+      case 'charge.success':
+      try{
+        $response = Capsule::table('tblinvoices')
+        ->where('id', $otherID)
+        ->update(
+            [
+                'status' => 'Paid',
+            ]
+        );
+        echo "Changed ID: {$otherID} to Paid Status.";
+        } catch (\Exception $e) {
+          echo "I couldn't update Status from ID: {$otherID} of Invoices. {$e->getMessage()}";
         }
-
-        addInvoicePayment($invoiceId,$jsonObj->id,$amount,$orderFee,$gatewayModuleName);
+        break;
+      case 'charge.pending':
+      echo "Status: {$response->type} of ID: {$otherID}.";
+      break;
+      default:
+      echo "Status: {$response->type} of ID: {$otherID}.";
+        break;
     }
-
-    die('Proceso terminado');
 }
 
 function verify_order ($order_id, $publickkey, $privatekey) {
     $curl = curl_init();
-
     curl_setopt_array($curl, array(
         CURLOPT_URL => "https://api.compropago.com/v1/charges/$order_id/",
         CURLOPT_RETURNTRANSFER => true,
@@ -119,14 +123,10 @@ function verify_order ($order_id, $publickkey, $privatekey) {
             "content-type: application/json",
         ),
     ));
-
     $response = curl_exec($curl);
-
     curl_close($curl);
-
     return json_decode($response);
 }
-
 /**
  * Inicializa el proceso
  */
