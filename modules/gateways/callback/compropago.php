@@ -72,10 +72,6 @@ function init_webhook() {
     if ($hash != $token) {
         die('Hash Verification Failure');
     }
-    $tblordersID = Capsule::table('tblorders')->where('invoiceid', $invoiceId)->get();
-    $generalID = json_decode(json_encode($tblordersID), true);
-    $justID = $generalID[0];
-    $otherID = $justID["id"];
 
     $invoiceId = checkCbInvoiceID($invoiceId, $gatewayModuleName);
     checkCbTransID($response->id);
@@ -84,7 +80,7 @@ function init_webhook() {
       case 'charge.success':
       try{
         $response = Capsule::table('tblinvoices')
-        ->where('id', $otherID)
+        ->where('id', $invoiceId)
         ->update(
             [
                 'status' => 'Paid',
