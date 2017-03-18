@@ -72,30 +72,31 @@ function init_webhook() {
     if ($hash != $token) {
         die('Hash Verification Failure');
     }
-
     $invoiceId = checkCbInvoiceID($invoiceId, $gatewayModuleName);
     checkCbTransID($response->id);
 
     switch ($response->type) {
       case 'charge.success':
-      try{
-        $response = Capsule::table('tblinvoices')
-        ->where('id', $invoiceId)
-        ->update(
-            [
-                'status' => 'Paid',
-            ]
-        );
-        echo "Changed ID: {$otherID} to Paid Status.";
-        } catch (\Exception $e) {
-          echo "I couldn't update Status from ID: {$otherID} of Invoices. {$e->getMessage()}";
-        }
+      $transactionStatus = 'Success';
+      logTransaction($gatewayModuleName, $_POST, $transactionStatus);
+      addInvoicePayment(
+        $invoiceId,
+        $response->short_id,
+        $amount,
+        $orderFee,
+        $gatewayModuleName
+    );
+
+    echo "Changed ID: {$invoiceId} to Paid Status. Folio: {$response->short_id}.";
         break;
       case 'charge.pending':
-      echo "Status: {$response->type} of ID: {$otherID}.";
+      $transactionStatus = 'Failure';
+      logTransaction($gatewayModuleName, $_POST, $transactionStatus);
+
+      echo "Status: {$response->type} of ID: {$invoiceId}. Folio: {$response->short_id}.";
       break;
       default:
-      echo "Status: {$response->type} of ID: {$otherID}.";
+      echo "Status: {$response->type} of ID: {$otherID}. Folio: {$response->short_id}.";
         break;
     }
 }
