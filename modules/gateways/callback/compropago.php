@@ -63,7 +63,7 @@ function init_webhook() {
     $token = explode('-', $token);
     $invoiceId = $token[0];
     $token = $token[1];
-    $amount    = $response->order_info->order_price;
+    $amount    = $response->order_info->exchange->origin_amount;
     $orderFee  = $response->fee;
     $hash = md5($invoiceId . $systemUrl . $publickey);
     /**
