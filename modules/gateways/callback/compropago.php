@@ -65,6 +65,7 @@ function init_webhook() {
     $token = $token[1];
     $amount    = $response->order_info->exchange->origin_amount;
     $orderFee  = $response->fee;
+    $feeWhmcs = 0;
     $hash = md5($invoiceId . $systemUrl . $publickey);
     /**
      * Validar si el pago corresponde a la tienda
@@ -83,7 +84,7 @@ function init_webhook() {
         $invoiceId,
         $response->short_id,
         $amount,
-        $orderFee,
+        $feeWhmcs,
         $gatewayModuleName
     );
 
