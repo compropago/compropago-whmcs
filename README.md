@@ -16,7 +16,7 @@ Con ComproPago puede recibir pagos en 7Eleven, Extra y muchas tiendas más en to
 - [Información de Contacto](https://compropago.com/contacto)
 
 ## Requerimientos
-* [WHMCS 6.3.x] (https://download.whmcs.com/)
+* [WHMCS 6.3.x - 7.x] (https://download.whmcs.com/)
 * [PHP >= 5.4](http://www.php.net/)
 * [PHP JSON extension](http://php.net/manual/en/book.json.php)
 * [PHP cURL extension](http://php.net/manual/en/book.curl.php)
