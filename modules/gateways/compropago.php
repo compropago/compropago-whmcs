@@ -18,18 +18,23 @@
  * Compropago WHMCS plugin
  * @author Eduardo Aguilar <eduardo.aguilar@compropago.com>
  */
+
 require_once __DIR__ ."/../../includes/functions.php";
+
 if (!defined("WHMCS")){
     die("This file cannot be accessed directly");
 }
+
 /**
- * Funcion que despluega los campos de configuracion para el modulo de ComproPago
+ * Configuration for payment method
  *
  * @return array
+ *
+ * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
  */
 function compropago_config(){
     global $CONFIG;
-    $uri = explode("/",$_SERVER["REQUEST_URI"]);
+
     return array(
         "FriendlyName" => array(
             "Type"          => "System",
@@ -80,34 +85,45 @@ function compropago_config(){
         ),
     );
 }
+
+
+/**
+ * Replace data array in the button view
+ *
+ * @param array $data
+ * @return bool|mixed|string
+ *
+ * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+ */
 function render_button($data){
     $button = file_get_contents(__DIR__ . '/../cpvendor/button.html');
+
     foreach ($data as $key => $value) {
         $button = str_replace($key, $value, $button);
     }
+
     return $button;
 }
+
+
 /**
- * Ejecucion del proceso de pago
+ * Show image of compropago and render button in WHMCS order
  *
- * @param $params
- * @return null
+ * @param array $params
+ * @return bool|mixed|null|string
+ *
+ * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
  */
 function compropago_link($params) {
     global $CONFIG;
-    /**
-     * Recuperación del template del formulario
-     *
-     * @param $data
-     * @return mixed|string
-     */
+
     $aux = null;
     $file = explode("/",$_SERVER["REQUEST_URI"]);
     $file = $file[sizeof($file) - 1];
     $publickey = ($params['mode'] == "Live") ? $params['publickey_live'] : $params['publickey_test'];
-    $privatekey = ($params['mode'] == "Live") ? $params['privatekey_live'] : $params['privatekey_test'];
     $hash = md5($params['invoiceid'] . $params['systemurl'] . $publickey);
-    if(preg_match('/viewinvoice.php/',$file)){
+
+    if (preg_match('/viewinvoice.php/',$file)) {
         $data = array(
             "{{publickey}}"         => $publickey,
             "{{order_id}}"          => $params['invoiceid'].'-'.$hash,
@@ -121,9 +137,11 @@ function compropago_link($params) {
             "{{client_name}}"       => "WHMCS",
             "{{version}}"           => $CONFIG['Version']
         );
+
         $aux = render_button($data);
-    }else{
+    } else {
         $aux = '<img src="https://media.licdn.com/media/p/5/005/02d/277/3e9dd1a.png"><br>';
     }
+
     return $aux;
 }
