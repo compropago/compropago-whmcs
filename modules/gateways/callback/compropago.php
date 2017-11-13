@@ -54,34 +54,38 @@ function init_webhook() {
     $response = verify_order($jsonObj->id, $publickey, $privatekey);
 
 
-    $token = $jsonObj->order_info->order_id;
-    $token = explode('-', $token);
-    $invoiceId = $token[0];
-    $token = $token[1];
-    $amount    = $response->order_info->exchange->origin_amount;
-    $feeWhmcs = 0;
+    $token      = $jsonObj->order_info->order_id;
+    $token      = explode('-', $token);
+    $invoiceId  = $token[0];
+    $token      = $token[1];
+    $amount     = $response->order_info->exchange->origin_amount;
+    $feeWhmcs   = 0;
     $hash = md5($invoiceId . $systemUrl . $publickey);
-
 
     if ($hash != $token) {
         die('Hash Verification Failure');
     }
 
-
-    $invoiceId = checkCbInvoiceID($invoiceId, $gatewayModuleName);
+    $invoiceId  = checkCbInvoiceID($invoiceId, $gatewayModuleName);
+    $getId      = explode("-",$jsonObj->order_info->order_id);
+    $command    = 'GetOrders';
+    $postData   = ['id' => $getId[0]];
+    $results    = localAPI($command, $postData, $admin);
     checkCbTransID($response->id);
 
     switch ($response->type) {
         case 'charge.success':
             $transactionStatus = 'Success';
             logTransaction($gatewayModuleName, $_POST, $transactionStatus);
-            addInvoicePayment(
-                $invoiceId,
-                $response->short_id,
-                $amount,
-                $feeWhmcs,
-                $gatewayModuleName
-            );
+            if($results["orders"]["order"][0]["paymentstatus"] != "Paid"){
+                addInvoicePayment(
+                    $invoiceId,
+                    $response->short_id,
+                    $amount,
+                    $feeWhmcs,
+                    $gatewayModuleName
+                );
+            };
 
             die(json_encode([
                 'status' => 'success',
