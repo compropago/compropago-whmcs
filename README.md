@@ -18,7 +18,7 @@ Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en tod
 - [Información de contacto](https://compropago.com/contacto)
 
 ## Requerimientos
-* [WooCommerce > (6.3.x - 7.x)](https://www.whmcs.com/)
+* [WHMCS > (6.3.x - 7.x)](https://www.whmcs.com/)
 * [PHP >= 5.4](http://www.php.net/)
 * [PHP JSON extension](http://php.net/manual/en/book.json.php)
 * [PHP cURL extension](http://php.net/manual/en/book.curl.php)
