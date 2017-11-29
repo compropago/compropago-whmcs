@@ -29,7 +29,6 @@ function init_webhook() {
         ]));
     }
 
-
     $request = @file_get_contents('php://input');
     if (!$jsonObj = json_decode($request)) {
         die(json_encode([
@@ -40,7 +39,6 @@ function init_webhook() {
         ]));
     }
 
-
     if ($jsonObj->short_id == '000000') {
         die(json_encode([
             'status' => 'success',
@@ -50,9 +48,7 @@ function init_webhook() {
         ]));
     }
 
-
     $response = verify_order($jsonObj->id, $publickey, $privatekey);
-
 
     $token      = $jsonObj->order_info->order_id;
     $token      = explode('-', $token);
@@ -61,9 +57,14 @@ function init_webhook() {
     $amount     = $response->order_info->exchange->origin_amount;
     $feeWhmcs   = 0;
     $hash = md5($invoiceId . $systemUrl . $publickey);
-
+    
     if ($hash != $token) {
-        die('Hash Verification Failure');
+        die(json_encode([
+            'status' => 'error',
+            'message' => 'Hash verification failure',
+            'short_id' => $jsonObj->short_id,
+            'reference' => null
+        ]));
     }
 
     $invoiceId  = checkCbInvoiceID($invoiceId, $gatewayModuleName);
