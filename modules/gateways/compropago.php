@@ -140,7 +140,7 @@ function compropago_link($params) {
 
         $aux = render_button($data);
     } else {
-        $aux = '<img src="https://media.licdn.com/media/p/5/005/02d/277/3e9dd1a.png"><br>';
+        $aux = '<img src="https://compropago.com/plugins/logo.png" alt="ComproPago"><br>';
     }
 
     return $aux;
