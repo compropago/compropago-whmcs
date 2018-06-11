@@ -125,17 +125,17 @@ function compropago_link($params) {
 
     if (preg_match('/viewinvoice.php/',$file)) {
         $data = array(
-            "{{publickey}}"         => $publickey,
-            "{{order_id}}"          => $params['invoiceid'].'-'.$hash,
-            "{{order_name}}"        => $params['description'],
-            "{{order_price}}"       => $params['amount'],
-            "{{customer_name}}"     => $params['clientdetails']['firstname']." ".$params['clientdetails']['lastname'],
-            "{{customer_email}}"    => $params['clientdetails']['email'],
-            "{{currency}}"          => $params['currency'],
-            "{{success_url}}"       => $params['returnurl'],
-            "{{failure_url}}"       => $params['returnurl'],
-            "{{client_name}}"       => "WHMCS",
-            "{{version}}"           => $CONFIG['Version']
+            "{{publickey}}"      => $publickey,
+            "{{order_id}}"       => $params['invoiceid'].'-'.$hash,
+            "{{order_name}}"     => $params['description'],
+            "{{order_price}}"    => $params['amount'],
+            "{{customer_name}}"  => $params['clientdetails']['firstname']." ".$params['clientdetails']['lastname'],
+            "{{customer_email}}" => $params['clientdetails']['email'],
+            "{{currency}}"       => $params['currency'],
+            "{{success_url}}"    => $params['returnurl'],
+            "{{failure_url}}"    => $params['returnurl'],
+            "{{client_name}}"    => "WHMCS",
+            "{{version}}"        => $CONFIG['Version']
         );
 
         $aux = render_button($data);
