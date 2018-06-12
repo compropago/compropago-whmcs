@@ -325,7 +325,7 @@ class CompropagoWebhook
 }
 
 try {
-    //header('Content-Type: application/json');
+    header('Content-Type: application/json');
     $webhook = new CompropagoWebhook();
     $webhook->execute();
 } catch(\Exception $e) {
