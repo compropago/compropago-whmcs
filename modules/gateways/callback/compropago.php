@@ -77,7 +77,7 @@ class CompropagoWebhook
 
         $data = [
             'short_id' => $body->short_id,
-            'amount' => $body->order_info->product_price,
+            'amount' => $body->order_info->exchange->origin_amount,
             'fee_whmcs' => 0
         ];
 
@@ -92,7 +92,33 @@ class CompropagoWebhook
      */
     public function withApi2($body) 
     {
+        $token      = $body->product->id;
+        $token      = explode('-', $token);
+        $invoiceId  = $token[0];
+        $token      = $token[1];
 
+        $data = [
+            'short_id' => $body->shortId,
+            'amount' => $body->product->exchange->originAmount,
+            'fee_whmcs' => 0
+        ];
+
+        $status = '';
+
+        switch ($body->status) {
+            case 'PENDING':
+                $status = 'charge.pendig';
+                break;
+            case 'ACCEPTED':
+                $status = 'charge.success';
+                break;
+            case 'EXPIRED':
+                $status = 'charge.expired';
+                break;
+        }
+
+        $this->hashVerification($invoiceId, $token);
+        $this->updateOrderStatus($status, $invoiceId, $body->id, $data);
     }
 
     /**
@@ -113,6 +139,7 @@ class CompropagoWebhook
 
     /**
      * Validate empty request
+     * @throws Exception
      */
     private function validateRequest()
     {
@@ -169,6 +196,7 @@ class CompropagoWebhook
      * Verify order using API v1
      * @param string $orderId
      * @return mixed
+     * @throws Exception
      */
     private function verifyWithApi1($orderId)
     {
@@ -183,7 +211,7 @@ class CompropagoWebhook
 
         $body = json_decode($response);
 
-        if (isset($body->status) && $body->status == 'error') {
+        if (isset($body->type) && $body->type == 'error') {
             throw new \Exception($body->message);
         }
 
@@ -194,10 +222,11 @@ class CompropagoWebhook
      * Verify order using API v2
      * @param string $orderId
      * @return mixed
+     * @throws Exception
      */
     private function verifyWithApi2($orderId)
     {
-        $url = "https://api.compropago.com/v2/charges/$orderId/";
+        $url = "https://api.compropago.com/v2/orders/$orderId/";
         $headers = [
             "authorization: Basic ".base64_encode($this->privateKey.':'.$this->publicKey),
             "cache-control: no-cache",
@@ -212,7 +241,7 @@ class CompropagoWebhook
             throw new \Exception($body->message);
         }
 
-        return $body;
+        return $body->data;
     }
 
     /**
@@ -255,7 +284,7 @@ class CompropagoWebhook
 
     private function updateOrderStatus($status, $invoiceId, $compropagoId, $data)
     {
-        $verifyId  = checkCbInvoiceID($invoiceId, $gatewayModuleName);
+        $verifyId  = checkCbInvoiceID($invoiceId, self::MODULE_NAME);
         $command    = 'GetOrders';
         $postData   = ['id' => $invoiceId];
         $results    = localAPI($command, $postData, $this->admin);
@@ -281,7 +310,7 @@ class CompropagoWebhook
                 break;
             case 'charge.expired':
                 $transactionStatus = 'Failure';
-                logTransaction($gatewayModuleName, $_POST, $transactionStatus);
+                logTransaction(self::MODULE_NAME, $_POST, $transactionStatus);
                 break;
         }
 
@@ -296,7 +325,7 @@ class CompropagoWebhook
 }
 
 try {
-    header('Content-Type: application/json');
+    //header('Content-Type: application/json');
     $webhook = new CompropagoWebhook();
     $webhook->execute();
 } catch(\Exception $e) {
