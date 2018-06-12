@@ -163,10 +163,7 @@ class CompropagoWebhook
      */
     private function isTestMode($reference)
     {
-        if ($reference == '000000') {
-            return true;
-        }
-        return false;
+        return $reference == '000000';
     }
 
     /**
